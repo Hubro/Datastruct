@@ -3,7 +3,15 @@ require "datastruct"
 
 class DataStructFactoryTest < Minitest::Test
   def setup
-    @subject = DataStruct(:foo, :bar)
+    @subject = DataStruct(:foo, :bar) {
+      def self.bark
+        :dog
+      end
+
+      def meow
+        :cat
+      end
+    }
   end
 
   def test_subclass
@@ -12,6 +20,11 @@ class DataStructFactoryTest < Minitest::Test
 
   def test_properties
     assert_equal [:foo, :bar], @subject::PROPERTIES
+  end
+
+  def test_class_eval_block
+    assert_equal :dog, @subject.bark
+    assert_equal :cat, @subject.new.meow
   end
 end
 
