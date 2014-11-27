@@ -9,6 +9,8 @@ def DataStruct(*props)
 end
 
 class DataStruct
+  VERSION = "0.0.1"
+
   def self.from_hash(hash)
     struct = self.new
 

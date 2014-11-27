@@ -1,7 +1,9 @@
 
+require_relative "lib/datastruct.rb"
+
 Gem::Specification.new do |s|
   s.name        = "datastruct"
-  s.version     = "0.0.1"
+  s.version     = DataStruct::VERSION
   s.licenses    = ["GPL"]
   s.summary     = "A great base class for data structures"
   s.description = File.read("README.rdoc")
