@@ -23,14 +23,29 @@ class DataStruct
     return struct
   end
 
-  def initialize(*args)
+  def initialize(*args, **kwargs)
+    d = @data || {}
+
     @data = Hash.new(nil)
+    @data.update(d)
 
     if args.length > self.class::PROPERTIES.length
       fail ArgumentError, "Too many arguments"
     end
 
-    @data.update(Hash[self.class::PROPERTIES.zip(args)])
+    args_keys = self.class::PROPERTIES[0...args.length]
+
+    args_keys.zip(args).each { |key, value|
+      self.send(setter(key), value)
+    }
+
+    kwargs.each { |key, value|
+      begin
+        self.send(setter(key), value)
+      rescue NoMethodError
+        fail ArgumentError, "Invalid property: #{key}"
+      end
+    }
   end
 
   def respond_to?(method_name)
