@@ -112,6 +112,11 @@ class DataStructTest < Minitest::Test
     }
   end
 
+  def test_update
+    @subject.expects(:foo=).with(123)
+    @subject.update(foo: 123)
+  end
+
   def test_to_hash
     assert_equal({foo: 12, bar: 34, baz: 56}, @subject.to_hash)
   end

@@ -28,10 +28,7 @@ class DataStruct
   end
 
   def initialize(*args, **kwargs)
-    d = @data || {}
-
-    @data = Hash.new(nil)
-    @data.update(d)
+    @data ||= {}
 
     if args.length > self.class::PROPERTIES.length
       fail ArgumentError, "Too many arguments"
@@ -39,11 +36,14 @@ class DataStruct
 
     args_keys = self.class::PROPERTIES[0...args.length]
 
-    args_keys.zip(args).each { |key, value|
-      self.send(setter(key), value)
-    }
+    update(Hash[args_keys.zip(args)])
+    update(kwargs)
+  end
 
-    kwargs.each { |key, value|
+  def update(hash)
+    @data ||= {}
+
+    hash.each_pair { |key, value|
       begin
         self.send(setter(key), value)
       rescue NoMethodError
