@@ -40,51 +40,6 @@ class DataStruct
     update(kwargs)
   end
 
-  def update(hash)
-    @data ||= {}
-
-    hash.each_pair { |key, value|
-      begin
-        self.send(setter(key), value)
-      rescue NoMethodError
-        fail ArgumentError, "Invalid property: #{key}"
-      end
-    }
-  end
-
-  def respond_to?(method_name)
-    if valid_property?(method_name) or valid_property?(getter(method_name))
-      true
-    else
-      super
-    end
-  end
-
-  ##
-  # Produces a text representation of the object
-  #
-  def inspect
-    text = "#<#{self.class.to_s}"
-
-    text << @data.reduce("") { |a, pair|
-      a << " #{pair[0]}=#{pair[1].inspect}"
-    }
-
-    text << ">"
-
-    return text
-  end
-
-  ##
-  # This is simply a delegate function for the underlying hash.
-  #
-  # @see Hash#each
-  # @overload each
-  #
-  def each(*args, &block)
-    @data.each(*args, &block)
-  end
-
   ##
   # @param [String, Symbol] property
   # @raise [KeyError] on invalid property name
@@ -115,10 +70,36 @@ class DataStruct
   end
 
   ##
-  # @return [Hash] a duplicate of the underlying hash
+  # This is simply a delegate function for the underlying hash.
   #
-  def to_hash
-    @data.dup
+  # @see Hash#each
+  # @overload each
+  #
+  def each(*args, &block)
+    @data.each(*args, &block)
+  end
+
+  ##
+  # Produces a text representation of the object
+  #
+  def inspect
+    text = "#<#{self.class.to_s}"
+
+    text << @data.reduce("") { |a, pair|
+      a << " #{pair[0]}=#{pair[1].inspect}"
+    }
+
+    text << ">"
+
+    return text
+  end
+
+  def respond_to?(method_name)
+    if valid_property?(method_name) or valid_property?(getter(method_name))
+      true
+    else
+      super
+    end
   end
 
   ##
@@ -126,6 +107,13 @@ class DataStruct
   #
   def to_a
     self.class::PROPERTIES.map { |name| @data[name] }
+  end
+
+  ##
+  # @return [Hash] a duplicate of the underlying hash
+  #
+  def to_hash
+    @data.dup
   end
 
   ##
@@ -146,6 +134,18 @@ class DataStruct
     @data.to_yaml(*args)
   end
 
+  def update(hash)
+    @data ||= {}
+
+    hash.each_pair { |key, value|
+      begin
+        self.send(setter(key), value)
+      rescue NoMethodError
+        fail ArgumentError, "Invalid property: #{key}"
+      end
+    }
+  end
+
   private
 
   ##
@@ -155,7 +155,7 @@ class DataStruct
     property = name
     set = false
 
-    if is_setter(property)
+    if is_setter?(property)
       property = getter(name)
       set = true
     end
@@ -180,10 +180,10 @@ class DataStruct
 
   ##
   # @example
-  #   is_setter(:foo)    # => false
-  #   is_setter(:foo=)   # => true
+  #   is_setter?(:foo)    # => false
+  #   is_setter?(:foo=)   # => true
   #
-  def is_setter(sym)
+  def is_setter?(sym)
     sym.to_s.end_with?("=")
   end
 
@@ -201,7 +201,7 @@ class DataStruct
   #   getter(:foo)    # => :foo
   #
   def getter(sym)
-    if is_setter(sym)
+    if is_setter?(sym)
       sym.to_s[0..-2].to_sym
     else
       sym
