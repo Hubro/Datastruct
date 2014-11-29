@@ -13,14 +13,18 @@ end
 class DataStruct
   VERSION = "0.0.1"
 
+  ##
+  # A more ideomatic way of calling +new(*array)+
+  #
+  def self.from_array(array)
+    self.new(*array)
+  end
+
+  ##
+  # A more ideomatic way of calling +new(**hash)+
+  #
   def self.from_hash(hash)
-    struct = self.new
-
-    hash.each { |key, value|
-      struct[key] = value
-    }
-
-    return struct
+    self.new(**hash)
   end
 
   def initialize(*args, **kwargs)

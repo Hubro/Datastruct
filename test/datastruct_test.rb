@@ -31,6 +31,14 @@ class DataStructClassTest < Minitest::Test
     @subject = DataStruct(:foo, :bar, :baz)
   end
 
+  def test_from_array
+    array = [1, 2, 3]
+    struct = @subject.from_array(array)
+
+    assert_equal array, struct.to_a
+    assert_instance_of @subject, struct
+  end
+
   def test_from_hash
     hash = {foo: 12, bar: 34, baz: 56}
     struct = @subject.from_hash(hash)
