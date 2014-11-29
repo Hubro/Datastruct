@@ -1,6 +1,4 @@
 
-require "datastruct"
-
 class DataStructFactoryTest < Minitest::Test
   def setup
     @subject = DataStruct(:foo, :bar) {
