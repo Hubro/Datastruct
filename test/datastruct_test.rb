@@ -50,7 +50,7 @@ class DataStructClassTest < Minitest::Test
   def test_invalid_from_hash
     hash = {quack: 12}
 
-    assert_raises(KeyError) {
+    assert_raises(ArgumentError) {
       @subject.from_hash hash
     }
   end

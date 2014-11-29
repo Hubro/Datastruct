@@ -3,7 +3,7 @@
 # A factory method for DataStruct subclasses
 #
 def DataStruct(*props, &block)
-  return Class.new(DataStruct) { |cls|
+  Class.new(DataStruct) { |cls|
     cls.const_set(:PROPERTIES, props)
 
     class_exec(&block) unless block.nil?
