@@ -86,7 +86,7 @@ class DataStructTest < Minitest::Test
     assert_equal 56, @subject[:baz]
   end
 
-  def test_string_hash_lookup
+  def test_hash_lookup_with_string_keys
     assert_equal 56, @subject["baz"]
   end
 

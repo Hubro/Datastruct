@@ -23,6 +23,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rake (10.4.0)
+    redcarpet (3.2.1)
     slop (3.6.0)
     yard (0.8.7.6)
 
@@ -36,4 +37,5 @@ DEPENDENCIES
   mocha (~> 1)
   pry
   rake
+  redcarpet (~> 3)
   yard (~> 0)

@@ -30,54 +30,37 @@ class DataStruct
   def initialize(*args, **kwargs)
     @data ||= {}
 
-    if args.length > self.class::PROPERTIES.length
-      fail ArgumentError, "Too many arguments"
-    end
-
-    args_keys = self.class::PROPERTIES[0...args.length]
-
-    update(Hash[args_keys.zip(args)])
-    update(kwargs)
+    self.update(*args)
+    self.update(**kwargs)
   end
 
   ##
-  # @param [String, Symbol] property
-  # @raise [KeyError] on invalid property name
+  # Delegates to +Hash#each+
   #
-  def [](property)
-    property = property.to_sym
-
-    if not valid_property? property
-      fail KeyError, "Property not defined: #{property}"
-    end
-
-    @data[property]
-  end
-
-  ##
-  # @param [String, Symbol] property
-  # @param [Object] value
-  # @raise [KeyError] on invalid property name
-  #
-  def []=(property, value)
-    property = property.to_sym
-
-    if not valid_property? property
-      fail KeyError, "Property not defined: #{property}"
-    end
-
-    @data[property] = value
-  end
-
-  ##
-  # This is simply a delegate function for the underlying hash.
-  #
-  # @see Hash#each
+  # @see http://ruby-doc.org/core-2.0.0/Hash.html#method-i-each Hash#each
   # @overload each
   #
   def each(*args, &block)
     @data.each(*args, &block)
   end
+
+  ##
+  # Returns a property using its getter method
+  #
+  # @param [String, Symbol] property
+  # @raise [KeyError] on invalid property name
+  #
+  def get(property)
+    property = property.to_sym
+
+    if not valid_property? property
+      fail KeyError, "Property not defined: #{property}"
+    end
+
+    self.send(property)
+  end
+
+  alias_method :[], :get
 
   ##
   # Produces a text representation of the object
@@ -103,22 +86,51 @@ class DataStruct
   end
 
   ##
-  # @return [Array] the values of the properties, in the right order
+  # Sets the value of a property using its setter method
   #
-  def to_a
+  # @param [String, Symbol] property
+  # @param [Object] value
+  # @raise [KeyError] on invalid property name
+  #
+  def set(property, value)
+    property = property.to_sym
+
+    if not valid_property? property
+      fail KeyError, "Property not defined: #{property}"
+    end
+
+    self.send(setter(property), value)
+  end
+
+  alias_method :[]=, :set
+
+  ##
+  # Returns the properties of the object as an array
+  #
+  # @return [Array]
+  #
+  def to_array
     self.class::PROPERTIES.map { |name| @data[name] }
   end
 
+  alias_method :to_a, :to_array
+
   ##
-  # @return [Hash] a duplicate of the underlying hash
+  # Returns the properties of the object as a hash
+  #
+  # @return [Hash]
   #
   def to_hash
     @data.dup
   end
 
+  alias_method :to_h, :to_hash
+
   ##
-  # Delegates to +Hash#to_json+
+  # Dumps the properties of this object to JSON using Ruby's JSON module
   #
+  # @note JSON must be loaded for this function to work
+  # @see http://www.ruby-doc.org/stdlib-2.0/libdoc/json/rdoc/JSON.html JSON
   # @return [String]
   #
   def to_json(*args)
@@ -126,24 +138,50 @@ class DataStruct
   end
 
   ##
-  # Delegates to +Hash#to_yaml+
+  # Dumps the properties of this object to YAML using Ruby's YAML module
   #
+  # @note YAML must be loaded for this function to work
+  # @see http://ruby-doc.org/stdlib-2.0.0/libdoc/yaml/rdoc/YAML.html YAML
   # @return [String]
   #
   def to_yaml(*args)
     @data.to_yaml(*args)
   end
 
-  def update(hash)
+  ##
+  # Updates the values of this object's properties
+  #
+  # Both positional arguments and keyword arguments are used to update the
+  # property values of the object. Positional arguments should be passed in the
+  # same order as the defined properties.
+  #
+  # @note Keyword arguments override posisional arguments
+  # @raise [ArgumentError] on invalid property names
+  # @return nil
+  #
+  def update(*args, **kwargs)
     @data ||= {}
+
+    if args.length > self.class::PROPERTIES.length
+      x = args.length
+      y = self.class::PROPERTIES.length
+      msg = "Too many arguments (you passed #{x} arguments for #{y} properties)"
+
+      fail ArgumentError, msg
+    end
+
+    hash = Hash[self.class::PROPERTIES[0...args.length].zip(args)]
+    hash.update(kwargs)
 
     hash.each_pair { |key, value|
       begin
-        self.send(setter(key), value)
-      rescue NoMethodError
+        self.set(key, value)
+      rescue KeyError => e
         fail ArgumentError, "Invalid property: #{key}"
       end
     }
+
+    nil
   end
 
   private

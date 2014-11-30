@@ -1,4 +1,0 @@
-
-= Datastruct
-
-A great base class for data structures

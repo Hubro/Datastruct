@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.version     = "0.0.1"
   s.licenses    = ["GPL"]
   s.summary     = "A great base class for data structures"
-  s.description = File.read("README.rdoc")
+  s.description = "See https://github.com/Hubro/Datastruct"
   s.authors     = ["Tomas Sandven"]
   s.email       = "tomas191191@gmail.com"
   s.homepage    = "https://github.com/Hubro/Datastruct"
@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry"
   s.add_development_dependency "byebug"
   s.add_development_dependency "yard", "~> 0"
+  s.add_development_dependency "redcarpet", "~> 3"   # Git flavored markdown
 end
