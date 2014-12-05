@@ -1,8 +1,7 @@
 
 # Datastruct
 
-Datastruct exists because I like {http://www.ruby-doc.org/core-2.0/Struct.html
-Struct}, but want more power.
+Datastruct exists because I like [Struct][Struct], but want more power.
 
 ## Usage examples
 
@@ -160,3 +159,5 @@ Additionally, Datastruct defines:
   - `#to_hash`/`#to_h` which returns a hash of the property values
   - `#to_json` which dumps the internal hash to JSON
   - `#to_yaml` which dumps the internal hash to YAML
+
+[Struct]: http://www.ruby-doc.org/core-2.0/Struct.html
