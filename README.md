@@ -57,7 +57,7 @@ sesame_street = StreetAddress.from_hash(
 
 ### Getting and setting properties
 
-Datastruct defined the methods `get` and `set`, which is used internally by
+Datastruct defines the methods `get` and `set`, which is used internally by
 `[]`, `[]=` and `update`. Both `get` and `set` accepts a property name in the
 form of a string or symbol, and gets/sets the property **using the accessor
 method**.

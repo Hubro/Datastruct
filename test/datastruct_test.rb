@@ -35,16 +35,24 @@ class DataStructClassTest < Minitest::Test
     array = [1, 2, 3]
     struct = @subject.from_array(array)
 
-    assert_equal array, struct.to_a
     assert_instance_of @subject, struct
+    assert_equal array, struct.to_a
   end
 
   def test_from_hash
     hash = {foo: 12, bar: 34, baz: 56}
     struct = @subject.from_hash(hash)
 
-    assert_equal hash, struct.to_hash
     assert_instance_of @subject, struct
+    assert_equal hash, struct.to_hash
+  end
+
+  def test_from_string_hash
+    hash = {"foo" => 12, "bar" => 34, "baz" => 56}
+    struct = @subject.from_hash(hash)
+
+    assert_instance_of @subject, struct
+    assert_equal({foo: 12, bar: 34, baz: 56}, struct.to_hash)
   end
 
   def test_invalid_from_hash
@@ -53,6 +61,12 @@ class DataStructClassTest < Minitest::Test
     assert_raises(ArgumentError) {
       @subject.from_hash hash
     }
+  end
+
+  def test_symbol_keys
+    hash = {"foo" => 12, bar: 34, "baz" => 56}
+
+    assert_equal({foo: 12, bar: 34, baz: 56}, @subject.send(:symbol_keys, hash))
   end
 end
 

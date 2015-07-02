@@ -24,6 +24,8 @@ class DataStruct
   # A more ideomatic way of calling +new(**hash)+
   #
   def self.from_hash(hash)
+    hash = symbol_keys(hash)
+
     self.new(**hash)
   end
 
@@ -185,6 +187,10 @@ class DataStruct
   end
 
   private
+
+  def self.symbol_keys(hash)
+    Hash[hash.each_pair.map { |x| [x[0].to_sym, x[1]] }]
+  end
 
   ##
   # This makes the struct accept the defined properties as instance methods

@@ -1,8 +1,8 @@
 
 Gem::Specification.new do |s|
   s.name        = "datastruct"
-  s.version     = "0.0.0"
-  s.date        = "2014-12-05"
+  s.version     = "0.0.1"
+  s.date        = "2015-07-02"
   s.licenses    = ["GPL"]
   s.summary     = "A great base class for data structures"
   s.description = <<TEXT
