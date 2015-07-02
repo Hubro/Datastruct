@@ -1,6 +1,7 @@
+/Gemfile.lock
 /.yardoc
 /doc
 /pkg
 
 /.ruby-version
-/*.sublime-*
+*.sw[op]
