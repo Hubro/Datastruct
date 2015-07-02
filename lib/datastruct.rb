@@ -37,6 +37,17 @@ class DataStruct
   end
 
   ##
+  # Delegates to +Hash#==+
+  #
+  def ==(other)
+    if not other.instance_of? self.class
+      false
+    else
+      @data == other.instance_variable_get(:@data)
+    end
+  end
+
+  ##
   # Delegates to +Hash#each+
   #
   # @see http://ruby-doc.org/core-2.0.0/Hash.html#method-i-each Hash#each

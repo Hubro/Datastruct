@@ -75,6 +75,13 @@ class DataStructTest < Minitest::Test
     @subject = DataStruct(:foo, :bar, :baz).new(12, 34, 56)
   end
 
+  def test_equals
+    a = @subject
+    b = @subject.dup
+
+    assert_equal a, b
+  end
+
   def test_property_lookup
     assert_equal 34, @subject.bar
   end
