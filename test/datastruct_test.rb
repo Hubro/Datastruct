@@ -111,10 +111,9 @@ class DataStructTest < Minitest::Test
     assert_equal 56, @subject["baz"]
   end
 
-  def test_invalid_hash_lookup
-    assert_raises(KeyError) {
-      @subject[:meow]
-    }
+  def test_hash_lookup_nonexistant_property
+    assert_equal nil, @subject["oqiwjncpdiasenw"]
+    assert_equal nil, @subject[:oqiwjncpdiasenw]
   end
 
   def test_hash_setting

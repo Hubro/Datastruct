@@ -73,7 +73,17 @@ class DataStruct
     self.send(property)
   end
 
-  alias_method :[], :get
+  ##
+  # Does the same as +#get+, but returns nil instead of raising +KeyError+
+  #
+  # @param [String, Symbol] key
+  # @return [Object]
+  #
+  def [](key)
+    get(key)
+  rescue KeyError
+    nil
+  end
 
   ##
   # Produces a text representation of the object
