@@ -11,7 +11,7 @@ def DataStruct(*props, &block)
 end
 
 class DataStruct
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
 
   ##
   # A more ideomatic way of calling +new(*array)+
