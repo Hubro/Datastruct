@@ -207,6 +207,15 @@ class DataStruct
     nil
   end
 
+  ##
+  # Delegates to +Hash#merge+
+  #
+  # @return [Hash]
+  #
+  def merge(other)
+    @data.merge(other)
+  end
+
   private
 
   def self.symbol_keys(hash)
