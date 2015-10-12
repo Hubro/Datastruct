@@ -11,7 +11,7 @@ def DataStruct(*props, &block)
 end
 
 class DataStruct
-  VERSION = "0.0.2"
+  VERSION = "0.0.3"
 
   def self.new(*args, **kwargs, &block)
     instance = allocate()
