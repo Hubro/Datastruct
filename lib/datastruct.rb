@@ -13,6 +13,15 @@ end
 class DataStruct
   VERSION = "0.0.2"
 
+  def self.new(*args, **kwargs, &block)
+    instance = allocate()
+    instance.instance_variable_set(:@data, {})
+
+    instance.send(:initialize, *args, **kwargs, &block)
+
+    return instance
+  end
+
   ##
   # A more ideomatic way of calling +new(*array)+
   #
@@ -30,8 +39,6 @@ class DataStruct
   end
 
   def initialize(*args, **kwargs)
-    @data ||= {}
-
     self.update(*args)
     self.update(**kwargs)
   end
@@ -183,8 +190,6 @@ class DataStruct
   # @return nil
   #
   def update(*args, **kwargs)
-    @data ||= {}
-
     if args.length > self.class::PROPERTIES.length
       x = args.length
       y = self.class::PROPERTIES.length

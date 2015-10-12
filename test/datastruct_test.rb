@@ -31,6 +31,18 @@ class DataStructClassTest < Minitest::Test
     @subject = DataStruct(:foo, :bar, :baz)
   end
 
+  ##
+  # Tests that the @data instance variable is initialized before #initialize
+  #
+  def test_data_pre_initialized
+    test_class = Class.new(DataStruct) {
+      def initialize(*args, **kwargs)
+      end
+    }
+
+    assert_equal({}, test_class.new(1, 2, 3, foo: :bar).instance_variable_get(:@data))
+  end
+
   def test_from_array
     array = [1, 2, 3]
     struct = @subject.from_array(array)
